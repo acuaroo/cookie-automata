@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Automata</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <div class="flex flex-col items-center">
+    <div class="py-2">
+      <h1 class="text-4xl p-2">Cookie Automata</h1>
+    </div>
+
+    <p class="text-left pb-8">
+      Expect to see efficiency and QoL updates soon.
+      Programmed on <a class="text-blue-500 underline" href="">these rules.</a>
+    </p>
+
+    <div class="flex flex-col">
+      <div class="flex justify-between py-1">
+        <label class="px-2" for="griddim">Grid Dimensions (>1):</label>
+        <input class="px-2 border-2" id="griddim" type="number" name="quantity" min="1" placeholder="10">
+      </div>
+  
+      <div class="flex justify-between py-1">
+        <label class="px-2" for="gridsize">Grid Size (>0):</label>
+        <input class="px-2 border-2" id="gridsize" type="number" name="quantity" min="1" placeholder="5">
+      </div>
+    </div>
+
+    <div id="tools" class="py-1 flex justify-center">
+      <div class="px-2"><button id="plant" class="border-2 p-4 bg-green-500"></button></div>
+      <div class="px-2"><button id="wall" class="border-2 p-4 bg-red-500"></button></div>
+      <div class="px-2"><button id="blank" class="border-2 p-4 bg-gray-200"></button></div>
+    </div>
+
+    <div class="py-2 flex">
+      <div class="px-1"><button class="p-2 border-2 bg-red-400" id="generateClearBtn">Generate/Clear</button></div>
+      <div class="px-1"><button class="p-2 border-2 bg-blue-300" id="simulate">Simulate</button></div>
+      <div class="px-1"><button class="p-2 border-2 bg-yellow-300" id="save">Export</button></div>
+      <div class="px-1">
+        <label for="load" class="p-2 border-2 bg-orange-300 cursor-pointer inline-block">Load</label>
+        <input type="file" class="hidden" id="load"></input>
+      </div>
+    </div>
+
+    <div class="p-4" id="grid"></div>
+  </div>
+</body>
+</html>
