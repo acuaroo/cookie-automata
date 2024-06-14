@@ -50,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     gridContainer.style.display = "grid";
     gridContainer.style.gridTemplateColumns = `repeat(${gridDimensions}, 1fr)`;
-    gridContainer.style.gridGap = "5px";
 
     for (let row = 0; row < gridDimensions; row++) {
       for (let col = 0; col < gridDimensions; col++) {
