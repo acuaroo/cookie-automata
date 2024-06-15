@@ -1,7 +1,7 @@
 # Cookie Automata
 
 ## Rules
-1. Update order is left to right, bottom to top
+1. Update order is left to right, top to bottom
 2. If an empty square is adjacent to exactly one plant, then that square will become a plant
 3. If an empty square is adjacent to zero or more than one plant, that square will remain empty
 
