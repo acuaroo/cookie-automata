@@ -6,7 +6,7 @@
 3. If an empty square is adjacent to zero or more than one plant, that square will remain empty
 
 ## Export/Import
-I'm making plans to allow you to import [from here](https://cursedsliver.github.io/Garden-calc-infinite-expansion/), but currently just don't have the time.
-The current system allows you to save/import only from here.
+Export/Import buttons just go to `.json` files, and can be only interpreted by this website currently.
+Import GCIE allows you to go to [here](https://cursedsliver.github.io/Garden-calc-infinite-expansion/), and export your data into the simulator.
 
 Find any bugs/features you want? Open up an issue!

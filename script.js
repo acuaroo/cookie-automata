@@ -13,6 +13,13 @@ const tailwindColors = {
 
 const offsets = [-1, 0, 1];
 
+const conversions = {
+  "d": "plant", // clover
+  "e": "plant", // gold clover
+  "$": "plant", // shriek
+  "g": "wall", // elder
+}
+
 function createEmptyGrid(size) {
   let grid = [];
 
@@ -27,6 +34,13 @@ function createEmptyGrid(size) {
   return grid;
 }
 
+function gridify(index, dimension) {
+  const row = Math.floor(index / dimension);
+  const column = index % dimension;
+  
+  return [row, column];
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const generateClearBtn = document.getElementById("generateClearBtn");
   const simulateBtn = document.getElementById("simulate");
@@ -38,6 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const plantButton = document.getElementById("plant");
   const wallButton = document.getElementById("wall");
   const blankButton = document.getElementById("blank");
+
+  const loadGcieInput = document.getElementById("loadgcie");
 
   let currentTool = "blank";
 
@@ -88,6 +104,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   generateClearBtn.addEventListener("click", () => {
+    if (!document.getElementById("griddim").value) {
+      document.getElementById("griddim").value = 10;
+    }
+
+    if (!document.getElementById("gridsize").value) {
+      document.getElementById("gridsize").value = 5;
+    }
 
     const userGridDimensions = parseInt(document.getElementById("griddim").value);
     const userGridSize = parseInt(document.getElementById("gridsize").value);
@@ -185,5 +208,81 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     reader.readAsText(file);
+  });
+
+  // Gonna document this a lot because this was a pain
+  // and so if anyone wants to parse GCIE again,
+  // here was my attempt:
+  loadGcieInput.addEventListener("paste", (event) => {
+    const pastedText = event.clipboardData.getData("text");
+    let array = pastedText.split(";");
+
+    // Format is x/...;3;3, where ... are any plants that start in
+    // 0,0 and onwards
+    const header = array[0].split("/");
+    const indicator = parseInt(header[0]);
+
+    // Right now, dimensions[0] is not needed, but if I want to have
+    // rectangle grids in the future, I'll just leave this here
+    let dimensions = [0, 0];
+
+    if (indicator % 2 === 0) {
+      dimensions[0] = (indicator / 2) + 2;
+      dimensions[1] = dimensions[0];
+    } else {
+      dimensions[0] = (Math.ceil(indicator / 2)) + 1;
+      dimensions[1] = dimensions[0] + 1;
+    }
+    
+    let gcieGrid = createEmptyGrid(dimensions[1]);
+    let pre = 0;
+
+    if (header[1]) {
+      // Split by number, as we do not care about the age
+      let headerSplit = header[1].split(/[0-9]+/);
+
+      for (; pre < headerSplit.length - 1; pre++) {
+        let actual = conversions[headerSplit[pre]];
+        let [x, y] = gridify(pre, dimensions[1]);
+
+        gcieGrid[x][y] = actual;
+      }
+    }
+
+    array = array.slice(1);
+    console.log(pre, array);
+
+    let mod = 0;
+
+    for (let i = pre + 1; i < array.length; i++) {
+      let value = array[i];
+      if (value == "3") continue;
+
+      let valueSplit = value.substring(1).split(/[0-9]+/);
+      let post = 0;
+      let valLen = valueSplit.length - 1;
+
+      for (; post < valueSplit.length - 1; post++) {
+        let actual = conversions[valueSplit[post]];
+        // mod += ((post == valueSplit.length - 2) && (valueSplit.length - 1 > 1) ? (valueSplit.length - 1) : 1);
+        mod += (
+          ((valLen > 1) && (post != 0)) ? 0 : 1
+        );
+
+        let [x, y] = gridify(post + i + pre + mod, dimensions[1]);
+        gcieGrid[x][y] = actual;
+      }
+
+      mod += (valLen > 2 ? valLen - 1 : 0);
+    }
+
+    grid = gcieGrid;
+    gridDimensions = dimensions[1];
+    gridSize = document.getElementById("gridsize").value || 5;
+
+    document.getElementById("griddim").value = gridDimensions;
+    document.getElementById("gridsize").value = gridSize;
+
+    renderGrid();
   });
 });
